@@ -1,6 +1,7 @@
-N = 10000;
-% make 100 random bits of values +- 1
-bits = sign(randn(N,1));
+% N = 10000;
+% % make 100 random bits of values +- 1
+% bits = sign(randn(N,1));
+bits = [-1,-1, -1,1, 1,1, 1,-1];
 
 Symbol_period = 20;
 
@@ -8,18 +9,32 @@ Symbol_period = 20;
 % with width equal to symbol period
 pulse = ones(Symbol_period, 1);
 
-% spread out the values in "bits" by Symbol_period
-% first create a vector to store the values
-x = zeros(Symbol_period*length(bits),1);
+% X is going to get upsampled
+x = zeros(length(bits)/2,1);
 
-% assign every Symbol_period-th sample to equal a value from bits
-x(1:Symbol_period:end) = bits;
+for n = 1:length(x)
+    m = 1+2*(n-1);
+    if isequal(bits(m:m+1), [-1,-1])
+        x(n) = -1 - 1i;
+    elseif isequal(bits(m:m+1), [-1,1])
+        x(n) = -1 + 1i;
+    elseif isequal(bits(m:m+1), [1,1])
+        x(n) = 1 + 1i;
+    elseif isequal(bits(m:m+1), [1, -1])
+        x(n) = 1 - 1i;
+    end
+end
+
+x = upsample(x, Symbol_period);
 
 % now convolve the single generic pulse with the spread-out bits
 x_tx = conv(pulse, x);
 
 % to visualize, make a stem plot
-stem(x_tx);
+subplot(211)
+stem(real(x_tx));
+subplot(212)
+stem(imag(x_tx));
 
 % zero pad the beginning with 100000 samples to ensure that any glitch that
 % happens when we start transmitting doesn't effect the data
