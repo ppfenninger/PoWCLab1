@@ -1,7 +1,7 @@
-% N = 10000;
+N = 10000;
 % % make 100 random bits of values +- 1
-% bits = sign(randn(N,1));
-bits = [-1,-1, -1,1, 1,1, 1,-1];
+bits = sign(randn(N,1));
+% bits = [-1,-1, -1,1, 1,1, 1,-1];
 
 Symbol_period = 20;
 
@@ -14,13 +14,13 @@ x = zeros(length(bits)/2,1);
 
 for n = 1:length(x)
     m = 1+2*(n-1);
-    if isequal(bits(m:m+1), [-1,-1])
+    if isequal(bits(m:m+1), [-1;-1])
         x(n) = -1 - 1i;
-    elseif isequal(bits(m:m+1), [-1,1])
+    elseif isequal(bits(m:m+1), [-1;1])
         x(n) = -1 + 1i;
-    elseif isequal(bits(m:m+1), [1,1])
+    elseif isequal(bits(m:m+1), [1;1])
         x(n) = 1 + 1i;
-    elseif isequal(bits(m:m+1), [1, -1])
+    elseif isequal(bits(m:m+1), [1; -1])
         x(n) = 1 - 1i;
     end
 end
