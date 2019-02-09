@@ -1,6 +1,12 @@
-N = 10000;
+% N = 10000;
 % % make 100 random bits of values +- 1
-bits = sign(randn(N,1));
+% bits = sign(randn(N,1));
+
+fileID = fopen('Pride and Prejudice.txt');
+chars = fread(fileID, '*char');
+fclose(fileID);
+bits = reshape(dec2bin(chars, 16).'-'0',1,[]);
+str = char(bin2dec(reshape(char(bits+'0'), 16,[]).'))
 % bits = [-1,-1, -1,1, 1,1, 1,-1];
 
 Symbol_period = 20;
@@ -9,19 +15,18 @@ Symbol_period = 20;
 % with width equal to symbol period
 pulse = ones(Symbol_period, 1);
 
-% X is going to get upsampled
 x = zeros(length(bits)/2,1);
 
 for n = 1:length(x)
     m = 1+2*(n-1);
-    if isequal(bits(m:m+1), [-1;-1])
-        x(n) = -1 - 1i;
-    elseif isequal(bits(m:m+1), [-1;1])
-        x(n) = -1 + 1i;
-    elseif isequal(bits(m:m+1), [1;1])
-        x(n) = 1 + 1i;
-    elseif isequal(bits(m:m+1), [1; -1])
-        x(n) = 1 - 1i;
+    if isequal(bits(m:m+1), [0,0])
+        x(n) = -1/2 - 1/2i;
+    elseif isequal(bits(m:m+1), [0,1])
+        x(n) = -1/2 + 1/2i;
+    elseif isequal(bits(m:m+1), [1,1])
+        x(n) = 1/2 + 1/2i;
+    elseif isequal(bits(m:m+1), [1, 0])
+        x(n) = 1/2 - 1/2i;
     end
 end
 
