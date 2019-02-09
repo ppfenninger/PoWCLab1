@@ -1,19 +1,26 @@
+load('cleanData.mat');
+ 
+bits = cleanData;
+ 
+plot(y);
+ 
 % Step 1: Estimate channel magnitude
 magnitude_estimate = rms(abs(bits(1:1000)));
-
+ 
 % Step 2: Divide received signal by estimate of channel magnitude
-y_bar = bits./magnitude_estimate;
-
+y_hat = bits./magnitude_estimate;
+ 
 % Step 3: Initialize variables
 psi = zeros(length(bits), 1);
 psi_hat = psi;
 x_hat = psi;
+e_sum = 0;
 e = psi;
 d = psi;
-
-beta = 0.1;
-alpha = beta/10;
-
+ 
+beta = 0.02;
+alpha = beta/5;
+ 
 % Start the loop
 for k = 1:length(bits)-1
     % Step 4: Correct phase offset
@@ -22,12 +29,10 @@ for k = 1:length(bits)-1
     % Step 5: Compute error signal
     e(k) = -real(x_hat(k))*imag(x_hat(k));
     
-    % Step 6: Compute correction factor
-    for l = 1:k
-        d(k) = d(k) + alpha * e(l);
-    end
+    e_sum = e_sum + e(k)*alpha;
+   
     
-    d(k) = d(k) + beta * e(k);
+    d(k) = e_sum + beta * e(k);
     
     % Step 7: update psi_hat
     psi_hat(k+1) = psi_hat(k) + d(k);
@@ -39,8 +44,10 @@ for k = 1:length(bits)-1
         psi_hat(k+1) = psi_hat(k+1) + 2*pi;
     end
 end
-
+n = 20;
+% x_hat = mean(reshape(x_hat(1:floor(length(x_hat)/20)*20), n, []));
+ 
 subplot(211)
-stem(real(x_hat));
+stem(real(x_hat(1:100)));
 subplot(212)
-stem(imag(x_hat);
+stem(imag(x_hat(1:100)));
