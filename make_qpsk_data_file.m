@@ -8,9 +8,10 @@ fclose(fileID);
 bits = reshape(dec2bin(chars, 16).'-'0',1,[]);
 % str = char(bin2dec(reshape(char(bits+'0'), 16,[]).')); %read bits as string
 % bits = [-1,-1, -1,1, 1,1, 1,-1];
-new_bits = zeros(length(bits) + 128, 1);
+new_bits = zeros(length(bits) + 256, 1);
 new_bits(1:128) = 1;
-new_bits(129:end) = bits;
+new_bits(129:256) = 0;
+new_bits(257:end) = bits;
 bits = new_bits;
 
 Symbol_period = 20;
