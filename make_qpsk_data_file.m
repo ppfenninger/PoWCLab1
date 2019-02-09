@@ -7,7 +7,13 @@ chars = fread(fileID, '*char');
 fclose(fileID);
 bits = reshape(dec2bin(chars, 16).'-'0',1,[]);
 str = char(bin2dec(reshape(char(bits+'0'), 16,[]).'));
+% str = char(bin2dec(reshape(char(bits+'0'), 16,[]).')); %read bits as string
 % bits = [-1,-1, -1,1, 1,1, 1,-1];
+new_bits = zeros(length(bits) + 256, 1);
+new_bits(1:128) = 1;
+new_bits(129:256) = 0;
+new_bits(257:end) = bits;
+bits = new_bits;
 
 Symbol_period = 20;
 
@@ -19,13 +25,13 @@ x = zeros(length(bits)/2,1);
 
 for n = 1:length(x)
     m = 1+2*(n-1);
-    if isequal(bits(m:m+1), [0,0])
+    if isequal(bits(m:m+1), [0;0])
         x(n) = -1/2 - 1/2i;
-    elseif isequal(bits(m:m+1), [0,1])
+    elseif isequal(bits(m:m+1), [0;1])
         x(n) = -1/2 + 1/2i;
-    elseif isequal(bits(m:m+1), [1,1])
+    elseif isequal(bits(m:m+1), [1;1])
         x(n) = 1/2 + 1/2i;
-    elseif isequal(bits(m:m+1), [1, 0])
+    elseif isequal(bits(m:m+1), [1; 0])
         x(n) = 1/2 - 1/2i;
     end
 end
