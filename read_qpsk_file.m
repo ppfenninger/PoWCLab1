@@ -1,5 +1,5 @@
 % Open the file containing the received samples
-f2 = fopen('rx4.dat', 'rb');
+f2 = fopen('rx8.dat', 'rb');
  
 % read data from the file
 tmp = fread(f2, 'float32');
@@ -15,16 +15,20 @@ fclose(f2);
 % imaginary part
 % y = zeros(length(tmp)/2,1);
 y = tmp(1:2:end)+1i*tmp(2:2:end);
+
+% plot(real(y))
+% figure
+% plot(fftshift(abs(fft(y.^4))))
  
 startSignal = 0;
 endSignal = 0;
  
-for i = 21:length(y)
-    if y(i) > 0.2 && startSignal == 0
+for i = 3.254e6:length(y)
+    if y(i) > 0.002 && startSignal == 0
         startSignal = i;
     end
     
-    if mean(abs(y(i-20:i))) < 0.005 && endSignal == 0 && startSignal ~= 0
+    if mean(abs(y(i-20:i))) < 0.0005 && endSignal == 0 && startSignal ~= 0
         endSignal = i - 20;
         break;
     end
@@ -34,13 +38,15 @@ cleanData = y(startSignal:endSignal);
  
 save('cleanData.mat', 'cleanData');
  
- 
-plot(real(y(startSignal:end)), imag(y(startSignal:end)), '*');
+% plot(real(y(startSignal:end)), imag(y(startSignal:end)), '*');
  
  
 % to visualize, plot the real and imaginary parts separately
-return;
-% subplot(211)
-% stem(real(y));
-% subplot(212)
-% stem(imag(y));
+% return;
+subplot(211)
+hold on
+plot(real(cleanData));
+hold off
+subplot(212)
+hold on
+plot(real(y));
