@@ -6,7 +6,7 @@ fileID = fopen('Pride and Prejudice.txt');
 chars = fread(fileID, '*char');
 fclose(fileID);
 bits = reshape(dec2bin(chars, 16).'-'0',1,[]);
-str = char(bin2dec(reshape(char(bits+'0'), 16,[]).'))
+str = char(bin2dec(reshape(char(bits+'0'), 16,[]).'));
 % bits = [-1,-1, -1,1, 1,1, 1,-1];
 
 Symbol_period = 20;

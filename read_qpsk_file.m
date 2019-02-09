@@ -1,5 +1,5 @@
 % Open the file containing the received samples
-f2 = fopen('rx8.dat', 'rb');
+f2 = fopen('rxp.dat', 'rb');
  
 % read data from the file
 tmp = fread(f2, 'float32');
@@ -16,20 +16,16 @@ fclose(f2);
 % y = zeros(length(tmp)/2,1);
 y = tmp(1:2:end)+1i*tmp(2:2:end);
 
-% plot(real(y))
-% figure
-% plot(fftshift(abs(fft(y.^4))))
- 
 startSignal = 0;
 endSignal = 0;
  
-for i = 3.254e6:length(y)
-    if y(i) > 0.002 && startSignal == 0
+for i = 3.337e6:length(y)
+    if y(i) > 0.01 && startSignal == 0
         startSignal = i;
     end
     
-    if mean(abs(y(i-20:i))) < 0.0005 && endSignal == 0 && startSignal ~= 0
-        endSignal = i - 20;
+    if mean(abs(y(i-20:i))) < 0.004 && endSignal == 0 && startSignal ~= 0 && i > 2000 + startSignal
+        endSignal = i-20;
         break;
     end
 end
