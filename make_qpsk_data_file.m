@@ -35,17 +35,21 @@ x = upsample(x, Symbol_period);
 % now convolve the single generic pulse with the spread-out bits
 x_tx = conv(pulse, x);
 
-% to visualize, make a stem plot
-subplot(211)
-stem(real(x_tx));
-subplot(212)
-stem(imag(x_tx));
 
+% Add known noise
+load('random_start_noise.mat');
+load('random_end_noise.mat');
 new_bits = zeros(length(x_tx) + length(random_start_noise)+length(random_end_noise), 1);
 new_bits(1:256) = random_start_noise;
 new_bits(257:end-256) = x_tx;
 new_bits(end-255:end) = random_end_noise;
 x_tx = new_bits;
+
+% to visualize, make a stem plot
+subplot(211)
+stem(real(x_tx));
+subplot(212)
+stem(imag(x_tx));
 
 
 % zero pad the beginning with 100000 samples to ensure that any glitch that
