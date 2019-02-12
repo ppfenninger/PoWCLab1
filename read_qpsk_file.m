@@ -16,21 +16,17 @@ fclose(f2);
 % y = zeros(length(tmp)/2,1);
 y = tmp(1:2:end)+1i*tmp(2:2:end);
 
-startSignal = 0;
-endSignal = 0;
+load('random_start_bits.mat')
+load('random_end_bits.mat')
  
-for i = 3.337e6:length(y)
-    if y(i) > 0.01 && startSignal == 0
-        startSignal = i;
-    end
-    
-    if mean(abs(y(i-20:i))) < 0.004 && endSignal == 0 && startSignal ~= 0 && i > 2000 + startSignal
-        endSignal = i-20;
-        break;
-    end
-end
+[xcorrStart, xcorrStartLag] = xcorr(y, whiteNoise);
+
+[~, startSignalIndex] = max(abs(xcorrStart));
+[~, endSignalIndex] = max(abs(xcorrEnd));
+
+startSignal = xcorrStartLag(startSignalIndex);
  
-cleanData = y(startSignal:endSignal);
+cleanData = y(startSignal:startSignal + 10000);
  
 save('cleanData.mat', 'cleanData');
  
