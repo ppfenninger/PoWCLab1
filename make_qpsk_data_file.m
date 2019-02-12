@@ -2,20 +2,12 @@ N = 10000;
 % make 100 random bits of values +- 1
 bits = (sign(randn(N,1)) + 1)./2;
 
-load('random_start_bits.mat')
-load('random_end_bits.mat')
-
 % fileID = fopen('Pride and Prejudice.txt');
 % chars = fread(fileID, '*char');
 % fclose(fileID);
 % bits = reshape(dec2bin(chars, 16).'-'0',1,[]);
 % str = char(bin2dec(reshape(char(bits+'0'), 16,[]).')); %read bits as string
 % bits = [-1,-1, -1,1, 1,1, 1,-1];
-new_bits = zeros(length(bits) + length(random_start_bits)+length(random_end_bits), 1);
-new_bits(1:128) = 1;
-new_bits(129:256) = 0;
-new_bits(257:end) = bits;
-bits = new_bits;
 
 Symbol_period = 20;
 
@@ -48,6 +40,13 @@ subplot(211)
 stem(real(x_tx));
 subplot(212)
 stem(imag(x_tx));
+
+new_bits = zeros(length(x_tx) + length(random_start_noise)+length(random_end_noise), 1);
+new_bits(1:256) = random_start_noise;
+new_bits(257:end-256) = x_tx;
+new_bits(end-255:end) = random_end_noise;
+x_tx = new_bits;
+
 
 % zero pad the beginning with 100000 samples to ensure that any glitch that
 % happens when we start transmitting doesn't effect the data
