@@ -21,7 +21,7 @@ freq_offset = -1*x_axis(max_index)./4;
 theta_hat = -1*angle(fft_x(max_index))./4;
 
 for k = 1:length(y_hat)
-    x_hat(k) = y_hat(k).*exp(1i*(freq_offset * (k-1) + theta_hat));
+    x_hat(k) = y_hat(k).*exp(1i*(freq_offset * (k-1) + theta_hat + 7*pi/4));
 end
 
 hold on
@@ -29,12 +29,16 @@ hold on
 % plot(real(x_hat), imag(x_hat), 'o');
 % plot(real(x_hat(1:400)));
 
-down_x = downsample(x_hat, 20);
+down_x = downsample(x_hat(10:end), 20);
 
 plot(real(down_x), imag(down_x), 'o');
-plot(real(down_x((length(down_x) - 60):length(down_x))), imag((length(down_x) - 60):length(down_x)), 'o');
+% bits = zeros(2*length(down_x), 1); 
 
-bits = zeros(2*length(down_x), 1); 
+% firstBits = [0, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0];
+
+
+
+% plot(real(down_x(1:8)), imag(down_x(1:8)), 'o')
 % 
 % for m = 1:length(down_x)
 %         bits(2*m - 1) = sign(real(down_x(m)));

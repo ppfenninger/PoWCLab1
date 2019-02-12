@@ -1,5 +1,5 @@
 % Open the file containing the received samples
-f2 = fopen('rxp.dat', 'rb');
+f2 = fopen('rxp2.dat', 'rb');
  
 % read data from the file
 tmp = fread(f2, 'float32');
@@ -16,8 +16,8 @@ fclose(f2);
 % y = zeros(length(tmp)/2,1);
 y = tmp(1:2:end)+1i*tmp(2:2:end);
 
-load('random_start_bits.mat')
-load('random_end_bits.mat')
+load('random_start_noise.mat')
+load('random_end_noise.mat')
  
 [xcorrStart, xcorrStartLag] = xcorr(y, random_start_noise);
 [xcorrEnd, xcorrEndLag] = xcorr(y, random_end_noise);
@@ -26,10 +26,12 @@ load('random_end_bits.mat')
 [~, endSignalIndex] = max(abs(xcorrEnd));
 
 startSignal = xcorrStartLag(startSignalIndex);
+endSignal = xcorrEndLag(endSignalIndex);
  
-cleanData = y(startSignal:startSignal + 10000);
+cleanData = y(startSignal + 257:endSignal);
  
 save('cleanData.mat', 'cleanData');
+% save('reallyNiceData.mat', 'cleanData');
  
 % plot(real(y(startSignal:end)), imag(y(startSignal:end)), '*');
  
