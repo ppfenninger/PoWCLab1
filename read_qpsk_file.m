@@ -19,7 +19,8 @@ y = tmp(1:2:end)+1i*tmp(2:2:end);
 load('random_start_bits.mat')
 load('random_end_bits.mat')
  
-[xcorrStart, xcorrStartLag] = xcorr(y, whiteNoise);
+[xcorrStart, xcorrStartLag] = xcorr(y, random_start_noise);
+[xcorrEnd, xcorrEndLag] = xcorr(y, random_end_noise);
 
 [~, startSignalIndex] = max(abs(xcorrStart));
 [~, endSignalIndex] = max(abs(xcorrEnd));
