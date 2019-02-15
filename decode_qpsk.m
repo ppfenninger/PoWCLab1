@@ -8,16 +8,25 @@ load('bits.mat');
 
 decoded_bits = (decoded_bits + 1)./2;
 
-disp(sum(decoded_bits(2:end - 1) ~= bits) ./ length(decoded_bits));
+% using this to figure out if we are rotated - the non rotated version
+% should have a large peak at zero
+[corr, lag] = xcorr(decoded_bits, bits(1:100));
 
-% hold on
-% grid on
-% plot(real(down_x), imag(down_x), 'o');
-
-[corr, lag] = xcorr(decoded_bits, bits);
-
+hold on
+xlabel('lag');
+ylabel('correlation');
 plot(lag, corr)
 
 [~, maxIndex] = max(corr);
 totalLag = lag(maxIndex);
+
+if totalLag == 0
+    disp(sum(decoded_bits(1:length(bits)) ~= bits) ./ length(decoded_bits));
+else
+    disp('total lag is not zero, signal may need to be rotated'); 
+end
+
+
+
+
 

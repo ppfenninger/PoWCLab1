@@ -1,5 +1,5 @@
 % Open the file containing the received samples
-f2 = fopen('rxp2.dat', 'rb');
+f2 = fopen('rxp3.dat', 'rb');
  
 % read data from the file
 tmp = fread(f2, 'float32');
@@ -31,17 +31,17 @@ endSignal = xcorrEndLag(endSignalIndex);
 cleanData = y(startSignal + 257:endSignal);
  
 save('cleanData.mat', 'cleanData');
-% save('reallyNiceData.mat', 'cleanData');
- 
-% plot(real(y(startSignal:end)), imag(y(startSignal:end)), '*');
- 
  
 % to visualize, plot the real and imaginary parts separately
 % return;
 subplot(211)
 hold on
+xlabel('samples');
+ylabel('amplitude');
 plot(real(cleanData));
 hold off
 subplot(212)
 hold on
+xlabel('samples');
+ylabel('amplitude');
 plot(real(y));
