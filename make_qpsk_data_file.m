@@ -1,6 +1,8 @@
-N = 10000;
-% make 100 random bits of values +- 1
-bits = (sign(randn(N,1)) + 1)./2;
+% N = 10000;
+% % make 100 random bits of values +- 1
+% bits = (sign(randn(N,1)) + 1)./2;
+
+load ('bits.mat');
 
 % fileID = fopen('Pride and Prejudice.txt');
 % chars = fread(fileID, '*char');
@@ -20,13 +22,13 @@ x = zeros(length(bits)/2,1);
 for n = 1:length(x)
     m = 1+2*(n-1);
     if isequal(bits(m:m+1), [0;0])
-        x(n) = -1/2 - 1/2i;
-    elseif isequal(bits(m:m+1), [0;1])
         x(n) = -1/2 + 1/2i;
+    elseif isequal(bits(m:m+1), [0;1])
+        x(n) = -1/2 - 1/2i;
     elseif isequal(bits(m:m+1), [1;1])
-        x(n) = 1/2 + 1/2i;
-    elseif isequal(bits(m:m+1), [1; 0])
         x(n) = 1/2 - 1/2i;
+    elseif isequal(bits(m:m+1), [1; 0])
+        x(n) = 1/2 + 1/2i;
     end
 end
 
