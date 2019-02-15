@@ -2,14 +2,7 @@
 % % make 100 random bits of values +- 1
 % bits = (sign(randn(N,1)) + 1)./2;
 
-load ('bits.mat');
-
-% fileID = fopen('Pride and Prejudice.txt');
-% chars = fread(fileID, '*char');
-% fclose(fileID);
-% bits = reshape(dec2bin(chars, 16).'-'0',1,[]);
-% str = char(bin2dec(reshape(char(bits+'0'), 16,[]).')); %read bits as string
-% bits = [-1,-1, -1,1, 1,1, 1,-1];
+load ('bits.mat'); %bits.mat was made using the above commented out code
 
 Symbol_period = 20;
 
@@ -17,8 +10,8 @@ Symbol_period = 20;
 % with width equal to symbol period
 pulse = ones(Symbol_period, 1);
 
+%Translate bits to qpsk samples
 x = zeros(length(bits)/2,1);
-
 for n = 1:length(x)
     m = 1+2*(n-1);
     if isequal(bits(m:m+1), [0;0])
@@ -32,6 +25,7 @@ for n = 1:length(x)
     end
 end
 
+% Upsample x to the width of pulses
 x = upsample(x, Symbol_period);
 
 % now convolve the single generic pulse with the spread-out bits
@@ -39,8 +33,8 @@ x_tx = conv(pulse, x);
 
 
 % Add known noise
-load('random_start_noise.mat');
-load('random_end_noise.mat');
+load('random_start_noise.mat'); %random noise are wgn normalized to max amplitude of our pulses
+load('random_end_noise.mat');  % we generated and saved them, so we can find our signal on the rx side
 new_bits = zeros(length(x_tx) + length(random_start_noise)+length(random_end_noise), 1);
 new_bits(1:256) = random_start_noise;
 new_bits(257:end-256) = x_tx;
