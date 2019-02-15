@@ -27,13 +27,27 @@ load('random_end_noise.mat')
 
 startSignal = xcorrStartLag(startSignalIndex);
 endSignal = xcorrEndLag(endSignalIndex);
+
+subplot(211)
+hold on
+xlabel('lag of start');
+ylabel('correlation of start');
+plot(xcorrStartLag, abs(xcorrStart));
+hold off
+subplot(212)
+hold on
+xlabel('lag of end');
+ylabel('correlation of end');
+plot(xcorrEndLag, abs(xcorrEnd));
  
 cleanData = y(startSignal + 257:endSignal);
  
 save('cleanData.mat', 'cleanData');
  
 % to visualize, plot the real and imaginary parts separately
-% return;
+% return
+
+figure;
 subplot(211)
 hold on
 xlabel('samples');
